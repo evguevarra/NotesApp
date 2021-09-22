@@ -47,6 +47,7 @@ class _AddEditPageState extends State<AddEditPage> {
                   createdTime: formattedDate,
                 ),
               );
+
               setState(() {
                 titleController.clear();
                 descriptionController.clear();
