@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:note_app/database/note_database.dart';
+import 'package:note_app/model/note.dart';
 import 'package:note_app/views/add_edit_page.dart';
+import 'dart:io';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -31,8 +34,25 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: Center(
-        child: Text('No Notes!'),
-      ),
+          child: FutureBuilder<List<Note>>(
+              future: DatabaseHelper.instance.getNotes(),
+              builder:
+                  (BuildContext context, AsyncSnapshot<List<Note>> snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(child: Text('Loading...'));
+                }
+                return snapshot.data!.isEmpty
+                    ? const Center(child: Text('No Notes.'))
+                    : ListView(
+                        children: snapshot.data!.map((note) {
+                          return Center(
+                            child: ListTile(
+                              title: Text(note.title),
+                            ),
+                          );
+                        }).toList(),
+                      );
+              })),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context)
