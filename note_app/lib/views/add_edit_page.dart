@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:note_app/models/notes_provider.dart';
+import 'package:provider/provider.dart';
 
 class AddEditPage extends StatefulWidget {
   const AddEditPage({Key? key}) : super(key: key);
@@ -9,6 +11,8 @@ class AddEditPage extends StatefulWidget {
 }
 
 class _AddEditPageState extends State<AddEditPage> {
+  TextEditingController title = TextEditingController();
+  TextEditingController description = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +34,11 @@ class _AddEditPageState extends State<AddEditPage> {
         ),
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              Provider.of<NotesProvider>(context, listen: false)
+                  .addNewNote(title.text, description.text);
+              Navigator.of(context).pop();
+            },
             child: const Text(
               'Save',
               style: TextStyle(
@@ -65,6 +73,7 @@ class _AddEditPageState extends State<AddEditPage> {
 
   TextFormField buildTitle() {
     return TextFormField(
+      controller: title,
       maxLines: 1,
       style: const TextStyle(
         fontSize: 24,
@@ -82,6 +91,7 @@ class _AddEditPageState extends State<AddEditPage> {
 
   TextFormField buildDescription() {
     return TextFormField(
+      controller: description,
       maxLines: 10,
       style: const TextStyle(
         fontSize: 18,

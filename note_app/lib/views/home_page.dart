@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:note_app/models/notes_provider.dart';
 import 'package:note_app/views/add_edit_page.dart';
+import 'package:note_app/widgets/notes_card.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -30,8 +33,21 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: Center(
-        child: Text('No Notes!'),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: Consumer<NotesProvider>(
+            builder: (context, NotesProvider data, child) {
+          return ListView.builder(
+              itemCount: data.getNotes.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
+                  child: NotesCard(
+                    note: data.getNotes[index],
+                  ),
+                );
+              });
+        }),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
